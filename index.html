@@ -1385,7 +1385,7 @@ function showToast(msg) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-if (TOKEN) { loadAll(); } else { showWelcome(); }
+if (TOKEN) { loadAll(); setInterval(() => { if (!document.getElementById('modalOverlay').classList.contains('open')) loadAll(); }, 60000); } else { showWelcome(); }
 </script>
 </body>
 </html>
