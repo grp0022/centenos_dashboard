@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centeno's Tire — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amber: #F2A93B;
+    --amber-light: #FFD080;
+    --amber-dim: #C98A2E;
+    --amber-glow: rgba(242,169,59,0.10);
+    --amber-glow2: rgba(242,169,59,0.06);
+    --amber-border: rgba(242,169,59,0.18);
+    --amber-border-h: rgba(242,169,59,0.35);
+    --bg: #0B0B0B;
+    --bg-card: #141414;
+    --bg-card-h: #1A1A1A;
+    --bg-elevated: #1E1E1E;
+    --border: rgba(255,255,255,0.06);
+    --border-light: rgba(255,255,255,0.10);
+    --text: #F5F1EB;
+    --text-soft: #BFBAB2;
+    --text-muted: #7A756D;
+    --text-faint: #4D4943;
+    --green: #3DD68C;
+    --green-bg: rgba(61,214,140,0.10);
+    --green-border: rgba(61,214,140,0.20);
+    --red: #E85D5D;
+    --red-bg: rgba(232,93,93,0.10);
+    --red-border: rgba(232,93,93,0.20);
+    --orange: #F2A93B;
+    --orange-bg: rgba(242,169,59,0.10);
+    --orange-border: rgba(242,169,59,0.20);
+    --blue: #5B9CF5;
+    --blue-bg: rgba(91,156,245,0.10);
+    --blue-border: rgba(91,156,245,0.20);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Ambient glow */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(242,169,59,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  ::selection { background: rgba(242,169,59,0.3); color: #fff; }
+
+  .container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ════════ HEADER ════════ */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11,11,11,0.85);
+    backdrop-filter: blur(30px) saturate(130%);
+    -webkit-backdrop-filter: blur(30px) saturate(130%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(242,169,59,0.2);
+  }
+
+  .logo-badge img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .logo-text-wrap {}
+
+  .logo-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .logo-name em {
+    color: var(--amber);
+    font-style: normal;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .live-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 0.02em;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+    box-shadow: 0 0 6px rgba(61,214,140,0.5);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+
+  .btn-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    color: var(--text-soft);
+    padding: 8px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-header:hover {
+    background: var(--bg-card-h);
+    border-color: var(--amber-border);
+    color: var(--amber);
+  }
+
+  .btn-header svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  /* ════════ CONFIG BAR ════════ */
+  .config-bar {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    display: none;
+  }
+
+  .config-bar.visible { display: block; animation: slideDown 0.2s ease; }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .config-inner {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .config-input {
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 10px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    flex: 1;
+    outline: none;
+    border-radius: var(--radius-sm);
+    transition: border-color 0.25s;
+  }
+
+  .config-input:focus { border-color: var(--amber-border-h); }
+  .config-input::placeholder { color: var(--text-faint); }
+
+  .config-save {
+    background: var(--amber);
+    border: none;
+    color: #000;
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .config-save:hover { background: var(--amber-light); }
+
+  /* ════════ MAIN ════════ */
+  main { padding: 36px 0 80px; }
+
+  /* Section headers */
+  .sec-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .sec-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .sec-meta {
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 500;
+  }
+
+  /* ════════ DATE & GREETING ════════ */
+  .hero-date {
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: riseIn 0.5s ease forwards;
+  }
+
+  .hero-greeting {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-day {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .hero-day span { color: var(--amber); }
+
+  /* ════════ KPI CARDS ════════ */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: riseIn 0.5s ease 0.08s forwards;
+  }
+
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .kpi-card:hover { border-color: var(--border-light); background: var(--bg-card-h); }
+  .kpi-card:hover::before { opacity: 1; }
+
+  .kpi-card:nth-child(1)::before { background: var(--amber); }
+  .kpi-card:nth-child(2)::before { background: var(--orange); }
+  .kpi-card:nth-child(3)::before { background: var(--green); }
+
+  .kpi-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 16px;
+  }
+
+  .kpi-icon-amber { background: var(--amber-glow); color: var(--amber); }
+  .kpi-icon-orange { background: var(--orange-bg); color: var(--orange); }
+  .kpi-icon-green { background: var(--green-bg); color: var(--green); }
+
+  .kpi-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .kpi-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .kpi-value.v-amber { color: var(--amber); }
+  .kpi-value.v-green { color: var(--green); }
+
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 400;
+  }
+
+  /* ════════ PROGRESS BAR ════════ */
+  .progress-section {
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: riseIn 0.5s ease 0.15s forwards;
+  }
+
+  .progress-bar {
+    display: flex;
+    gap: 3px;
+    height: 8px;
+    border-radius: 100px;
+    overflow: hidden;
+    background: var(--bg-card);
+    margin-bottom: 14px;
+  }
+
+  .progress-seg {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .legend-row {
+    display: flex;
+    gap: 20px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ════════ CONTENT LAYOUT ════════ */
+  .content-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+    opacity: 0;
+    animation: riseIn 0.5s ease 0.22s forwards;
+  }
+
+  /* ════════ ORDERS TABLE ════════ */
+  .table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .table-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .table-count {
+    font-size: 11px;
+    color: var(--text-faint);
+    background: var(--bg-elevated);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-weight: 500;
+  }
+
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .orders-table thead th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    background: rgba(255,255,255,0.01);
+  }
+
+  .orders-table tbody tr {
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .orders-table tbody tr:hover td { background: rgba(242,169,59,0.02); }
+
+  .orders-table tbody td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-soft);
+    vertical-align: middle;
+  }
+
+  .orders-table tbody tr:last-child td { border-bottom: none; }
+
+  .order-id-cell {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .cell-name {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .cell-phone {
+    font-size: 10px;
+    color: var(--text-faint);
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  /* Tire tags */
+  .tire-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  .tire-tag {
+    display: inline-flex;
+    align-items: center;
+    background: var(--amber-glow2);
+    border: 1px solid var(--amber-border);
+    color: var(--amber);
+    padding: 3px 10px;
+    font-size: 10px;
+    border-radius: 100px;
+    font-weight: 500;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+
+  tr:hover .tire-tag { background: var(--amber-glow); border-color: var(--amber-border-h); }
+
+  .tire-tag-extra {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+  }
+
+  /* Status badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 100px;
+    letter-spacing: 0.01em;
+  }
+
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  .badge-pendiente { color: var(--orange); background: var(--orange-bg); }
+  .badge-completada { color: var(--green); background: var(--green-bg); }
+  .badge-cancelada { color: var(--red); background: var(--red-bg); }
+  .badge-rechazada { color: var(--text-muted); background: rgba(70,66,60,0.15); }
+  .badge-en-proceso { color: var(--blue); background: var(--blue-bg); }
+
+  .cell-date { font-size: 11px; color: var(--text-faint); font-weight: 400; }
+
+  /* ════════ TOP CLIENTS SIDEBAR ════════ */
+  .clients-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    height: fit-content;
+  }
+
+  .clients-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .clients-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .clients-list { padding: 8px 0; }
+
+  .client-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 24px;
+    transition: background 0.2s;
+    cursor: default;
+  }
+
+  .client-row:hover { background: rgba(242,169,59,0.02); }
+
+  .client-pos {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-faint);
+    width: 24px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+
+  .client-row:first-child .client-pos { color: var(--amber); }
+
+  .client-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .client-row:first-child .client-avatar {
+    background: var(--amber-glow);
+    border-color: var(--amber-border);
+    color: var(--amber);
+  }
+
+  .client-info { flex: 1; min-width: 0; }
+
+  .client-info-name {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .client-info-phone {
+    font-size: 10px;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+
+  .client-orders {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .client-orders-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1;
+  }
+
+  .client-orders-label {
+    font-size: 9px;
+    color: var(--text-faint);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  /* ════════ WELCOME / LOADING / ERROR ════════ */
+  .welcome-screen {
+    text-align: center;
+    padding: 100px 40px;
+  }
+
+  .welcome-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 28px;
+    box-shadow: 0 0 48px rgba(242,169,59,0.2), 0 0 96px rgba(242,169,59,0.1);
+  }
+
+  .welcome-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .welcome-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .welcome-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
+
+  .welcome-btn {
+    background: var(--amber);
+    border: none;
+    color: #000;
+    padding: 14px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(242,169,59,0.3);
+  }
+
+  .welcome-btn:hover { background: var(--amber-light); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(242,169,59,0.35); }
+  .welcome-btn:active { transform: translateY(0); }
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px;
+    gap: 16px;
+  }
+
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid var(--border);
+    border-top-color: var(--amber);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .error-state {
+    padding: 24px;
+    border: 1px solid var(--red-border);
+    background: var(--red-bg);
+    color: var(--red);
+    font-size: 13px;
+    border-radius: var(--radius);
+    font-weight: 500;
+  }
+
+  .no-data { color: var(--text-faint); font-size: 12px; padding: 24px; }
+
+  /* ════════ MODAL ════════ */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes modalPop {
+    from { opacity: 0; transform: scale(0.95) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal::-webkit-scrollbar { width: 3px; }
+  .modal::-webkit-scrollbar-track { background: transparent; }
+  .modal::-webkit-scrollbar-thumb { background: var(--amber-border); border-radius: 10px; }
+
+  .modal-top {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .modal-x {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+
+  .modal-x:hover { background: var(--bg-card-h); color: var(--text); border-color: var(--border-light); }
+
+  .modal-content { padding: 28px; }
+
+  .modal-field { margin-bottom: 22px; }
+
+  .modal-field-label {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .modal-field-value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .modal-items-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .modal-item-tag {
+    display: inline-flex;
+    background: var(--amber-glow);
+    border: 1px solid var(--amber-border);
+    color: var(--amber);
+    padding: 6px 14px;
+    font-size: 11px;
+    border-radius: 100px;
+    font-weight: 500;
+  }
+
+  .modal-select {
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: border-color 0.25s;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%237A756D' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+  }
+
+  .modal-select:focus { border-color: var(--amber-border-h); }
+
+  .modal-action {
+    width: 100%;
+    background: var(--amber);
+    border: none;
+    color: #000;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.25s;
+  }
+
+  .modal-action:hover { background: var(--amber-light); }
+  .modal-action:disabled { background: var(--bg-elevated); color: var(--text-faint); cursor: not-allowed; }
+
+  .modal-feedback {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 500;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  /* ════════ TOAST ════════ */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--amber-border);
+    color: var(--text);
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    z-index: 300;
+    display: none;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+
+  .toast.show { display: flex; align-items: center; gap: 8px; animation: toastPop 0.3s ease; }
+
+  @keyframes toastPop {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .toast-check { color: var(--green); font-size: 14px; }
+
+  /* ════════ ANIMATIONS ════════ */
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ════════ RESPONSIVE ════════ */
+  @media (max-width: 1024px) {
+    .content-layout { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: 1fr; gap: 10px; }
+    .container { padding: 0 16px; }
+    .hero-day { font-size: 24px; }
+    .kpi-value { font-size: 36px; }
+    .header-inner { gap: 12px; }
+    .btn-header span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-badge"><img src="https://raw.githubusercontent.com/grp0022/Centenos-Tire-Image/main/logo.jpg" alt="Centeno's Tire"></div>
+        <div class="logo-text-wrap">
+          <div class="logo-name">Centeno's <em>Tire</em></div>
+          <div class="logo-sub">Dashboard</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="live-pill">
+          <div class="live-dot"></div>
+          Live
+        </div>
+        <button class="btn-header" onclick="loadAll()">
+          <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-2.63-6.36" stroke-linecap="round"/><path d="M21 3v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Actualizar</span>
+        </button>
+        <button class="btn-header" onclick="toggleConfig()">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <span>Config</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="config-bar" id="configBar">
+  <div class="container">
+    <div class="config-inner">
+      <input class="config-input" id="inputToken" placeholder="Personal Access Token de Airtable (pat...)" type="password" spellcheck="false">
+      <button class="config-save" onclick="saveConfig()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div id="mainContent"></div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-top">
+      <div class="modal-heading" id="modalTitle">Detalle de Orden</div>
+      <button class="modal-x" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-content" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE_ID = 'appoL2S8bfxQ68OvN';
+const TABLES = {
+  clientes: 'Clientes',
+  ofertas: 'Ofertas',
+  ordenes: 'Ordenes',
+  items: 'Items_Orden'
+};
+
+let TOKEN = localStorage.getItem('ct_token') || '';
+let allOrders = [];
+let allClients = [];
+let allItems = [];
+let currentOrderId = null;
+
+function toggleConfig() {
+  const bar = document.getElementById('configBar');
+  bar.classList.toggle('visible');
+  if (bar.classList.contains('visible')) {
+    document.getElementById('inputToken').value = TOKEN;
+    document.getElementById('inputToken').focus();
+  }
+}
+
+function saveConfig() {
+  const t = document.getElementById('inputToken').value.trim();
+  if (!t) return;
+  TOKEN = t;
+  localStorage.setItem('ct_token', t);
+  document.getElementById('configBar').classList.remove('visible');
+  showToast('Configuración guardada');
+  loadAll();
+}
+
+async function airtableFetch(table, params = '') {
+  const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(table)}${params}`;
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${TOKEN}` } });
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  return res.json();
+}
+
+async function airtablePatch(table, recordId, fields) {
+  const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(table)}/${recordId}`;
+  const res = await fetch(url, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields })
+  });
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  return res.json();
+}
+
+async function fetchAll(table) {
+  let records = [], offset = null;
+  do {
+    const q = offset ? `?offset=${offset}` : '';
+    const data = await airtableFetch(table, q);
+    records = records.concat(data.records);
+    offset = data.offset;
+  } while (offset);
+  return records;
+}
+
+async function loadAll() {
+  if (!TOKEN) { showWelcome(); return; }
+  document.getElementById('mainContent').innerHTML = '<div class="loading-state"><div class="spinner"></div><div class="loading-text">Cargando datos...</div></div>';
+  try {
+    const [orders, clients, items] = await Promise.all([
+      fetchAll(TABLES.ordenes),
+      fetchAll(TABLES.clientes),
+      fetchAll(TABLES.items)
+    ]);
+    allOrders = orders;
+    allClients = clients;
+    allItems = items;
+    renderDashboard();
+  } catch (e) {
+    document.getElementById('mainContent').innerHTML = `<div class="error-state">⚠ Error al conectar con Airtable — ${e.message}. Verifica tu token en Config.</div>`;
+  }
+}
+
+function showWelcome() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="welcome-screen">
+      <div class="welcome-icon"><img src="https://raw.githubusercontent.com/grp0022/Centenos-Tire-Image/main/logo.jpg" alt="Centeno's Tire"></div>
+      <div class="welcome-title">Bienvenido al Dashboard</div>
+      <div class="welcome-sub">Ingresa tu Personal Access Token de Airtable para comenzar</div>
+      <button class="welcome-btn" onclick="toggleConfig()">Configurar Acceso</button>
+    </div>
+  `;
+}
+
+function getInitials(name) {
+  if (!name) return '?';
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function renderDashboard() {
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Puerto_Rico' });
+  const ordersToday = allOrders.filter(o => {
+    const created = new Date(o.createdTime).toLocaleDateString('en-CA', { timeZone: 'America/Puerto_Rico' });
+    return created === today;
+  });
+  const pendientes = allOrders.filter(o => o.fields.Estado === 'Pendiente');
+  const completadas = allOrders.filter(o => o.fields.Estado === 'Completada');
+  const total = allOrders.length;
+
+  const clientVolume = {};
+  allOrders.forEach(o => {
+    const cid = Array.isArray(o.fields.Cliente) ? o.fields.Cliente[0] : o.fields.Cliente;
+    if (cid) clientVolume[cid] = (clientVolume[cid] || 0) + 1;
+  });
+
+  const topClients = Object.entries(clientVolume)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(([id, count]) => {
+      const c = allClients.find(x => x.id === id);
+      return { id, count, name: c?.fields?.Nombre || 'Desconocido', phone: c?.fields?.Telefono || '' };
+    });
+
+  const pPend = total ? Math.round((pendientes.length / total) * 100) : 0;
+  const pComp = total ? Math.round((completadas.length / total) * 100) : 0;
+  const pOther = Math.max(0, 100 - pPend - pComp);
+
+  const now = new Date();
+  const dayName = now.toLocaleDateString('es-PR', { weekday: 'long' });
+  const dateRest = now.toLocaleDateString('es-PR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const hour = now.getHours();
+  const greeting = hour < 12 ? 'Buenos días' : hour < 18 ? 'Buenas tardes' : 'Buenas noches';
+
+  document.getElementById('mainContent').innerHTML = `
+    <div class="hero-date">
+      <div class="hero-greeting">${greeting} 👋</div>
+      <div class="hero-day"><span>${dayName.charAt(0).toUpperCase() + dayName.slice(1)}</span>, ${dateRest}</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon-amber">📦</div>
+        <div class="kpi-label">Órdenes Hoy</div>
+        <div class="kpi-value">${ordersToday.length}</div>
+        <div class="kpi-sub">${total} total en sistema</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon-orange">⏳</div>
+        <div class="kpi-label">Pendientes</div>
+        <div class="kpi-value v-amber">${pendientes.length}</div>
+        <div class="kpi-sub">${pPend}% del total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon-green">✓</div>
+        <div class="kpi-label">Completadas</div>
+        <div class="kpi-value v-green">${completadas.length}</div>
+        <div class="kpi-sub">${pComp}% del total</div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-bar">
+        <div class="progress-seg" style="width:${pPend}%;background:var(--orange)"></div>
+        <div class="progress-seg" style="width:${pComp}%;background:var(--green)"></div>
+        <div class="progress-seg" style="width:${pOther}%;background:var(--bg-elevated)"></div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Pendiente</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Completada</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--bg-elevated)"></div>Otro</div>
+      </div>
+    </div>
+
+    <div class="content-layout">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Órdenes Recientes</div>
+          <div class="table-count">${allOrders.length} registros</div>
+        </div>
+        ${renderOrdersTable()}
+      </div>
+
+      <div class="clients-card">
+        <div class="clients-header">
+          <div class="clients-title">Top Clientes</div>
+        </div>
+        <div class="clients-list">
+          ${topClients.length === 0 ? '<div class="no-data">Sin datos de clientes</div>' : ''}
+          ${topClients.map((c, i) => `
+            <div class="client-row">
+              <div class="client-pos">${i + 1}</div>
+              <div class="client-avatar">${getInitials(c.name)}</div>
+              <div class="client-info">
+                <div class="client-info-name">${c.name}</div>
+                <div class="client-info-phone">${c.phone}</div>
+              </div>
+              <div class="client-orders">
+                <div class="client-orders-num">${c.count}</div>
+                <div class="client-orders-label">órdenes</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderOrdersTable() {
+  const sorted = [...allOrders].sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime)).slice(0, 20);
+  if (sorted.length === 0) return '<div class="no-data">No hay órdenes aún</div>';
+
+  return `
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Orden</th>
+          <th>Cliente</th>
+          <th>Gomas</th>
+          <th>Status</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sorted.map(o => {
+          const cid = Array.isArray(o.fields.Cliente) ? o.fields.Cliente[0] : o.fields.Cliente;
+          const client = allClients.find(x => x.id === cid);
+          const orderItems = allItems.filter(i => {
+            const oid = Array.isArray(i.fields.Orden) ? i.fields.Orden[0] : i.fields.Orden;
+            return oid === o.id;
+          });
+          const estado = o.fields.Estado || 'Pendiente';
+          const estadoClass = estado.toLowerCase().replace(/\s+/g, '-');
+          const fecha = new Date(o.createdTime).toLocaleDateString('es-PR');
+
+          return `
+            <tr onclick="openModal('${o.id}')">
+              <td><div class="order-id-cell">#${o.fields.Numero_Orden || o.id.slice(-6).toUpperCase()}</div></td>
+              <td>
+                <div class="cell-name">${client?.fields?.Nombre || 'N/A'}</div>
+                <div class="cell-phone">${client?.fields?.Telefono || ''}</div>
+              </td>
+              <td>
+                <div class="tire-tags">
+                  ${orderItems.slice(0, 2).map(i => `<span class="tire-tag">${i.fields.Tamaño_Goma || i.fields.Medida || '?'} ×${i.fields.Cantidad || 1}</span>`).join('')}
+                  ${orderItems.length > 2 ? `<span class="tire-tag tire-tag-extra">+${orderItems.length - 2}</span>` : ''}
+                  ${orderItems.length === 0 ? '<span style="color:var(--text-faint);font-size:10px">—</span>' : ''}
+                </div>
+              </td>
+              <td><span class="badge badge-${estadoClass}"><span class="badge-dot"></span>${estado}</span></td>
+              <td><span class="cell-date">${fecha}</span></td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function openModal(orderId) {
+  currentOrderId = orderId;
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+
+  const cid = Array.isArray(order.fields.Cliente) ? order.fields.Cliente[0] : order.fields.Cliente;
+  const client = allClients.find(x => x.id === cid);
+  const orderItems = allItems.filter(i => {
+    const oid = Array.isArray(i.fields.Orden) ? i.fields.Orden[0] : i.fields.Orden;
+    return oid === orderId;
+  });
+
+  const estado = order.fields.Estado || 'Pendiente';
+  const fecha = new Date(order.createdTime).toLocaleString('es-PR');
+
+  document.getElementById('modalTitle').textContent = `Orden #${order.fields.Numero_Orden || orderId.slice(-6).toUpperCase()}`;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-field">
+      <div class="modal-field-label">Cliente</div>
+      <div class="modal-field-value">${client?.fields?.Nombre || 'N/A'}</div>
+      <div style="font-size:11px;color:var(--text-faint);margin-top:4px">${client?.fields?.Telefono || ''}</div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">Fecha</div>
+      <div class="modal-field-value" style="font-size:13px">${fecha}</div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">Gomas Ordenadas</div>
+      <div class="modal-items-grid">
+        ${orderItems.map(i => `
+          <span class="modal-item-tag">${i.fields.Tamaño_Goma || i.fields.Medida || '?'} — ${i.fields.Marca_Goma || i.fields.Marca || 'Sin marca'} — ×${i.fields.Cantidad || 1}</span>
+        `).join('')}
+        ${orderItems.length === 0 ? '<span style="color:var(--text-faint);font-size:11px">Sin items registrados</span>' : ''}
+      </div>
+    </div>
+    ${order.fields.Notas ? `
+      <div class="modal-field">
+        <div class="modal-field-label">Notas</div>
+        <div class="modal-field-value" style="font-size:13px;line-height:1.7">${order.fields.Notas}</div>
+      </div>
+    ` : ''}
+    <div class="modal-field">
+      <div class="modal-field-label">Cambiar Status</div>
+      <select class="modal-select" id="modalStatus">
+        <option value="Pendiente" ${estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+        <option value="Completada" ${estado === 'Completada' ? 'selected' : ''}>Completada</option>
+      </select>
+    </div>
+    <button class="modal-action" id="modalSaveBtn" onclick="saveStatus()">Guardar Cambios</button>
+    <div class="modal-feedback" id="savingMsg"></div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentOrderId = null;
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+async function saveStatus() {
+  if (!currentOrderId) return;
+  const newStatus = document.getElementById('modalStatus').value;
+  const btn = document.getElementById('modalSaveBtn');
+  const msg = document.getElementById('savingMsg');
+
+  btn.disabled = true;
+  msg.textContent = 'Guardando...';
+
+  try {
+    await airtablePatch(TABLES.ordenes, currentOrderId, { Estado: newStatus });
+    const order = allOrders.find(o => o.id === currentOrderId);
+    if (order) order.fields.Estado = newStatus;
+    msg.textContent = '✓ Guardado';
+    showToast('Status actualizado');
+    setTimeout(() => { closeModal(); renderDashboard(); }, 700);
+  } catch (e) {
+    msg.textContent = 'Error — ' + e.message;
+    btn.disabled = false;
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerHTML = `<span class="toast-check">✓</span> ${msg}`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+if (TOKEN) { loadAll(); } else { showWelcome(); }
+</script>
+</body>
+</html>
