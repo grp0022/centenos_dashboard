@@ -454,6 +454,12 @@
     justify-content: space-between;
   }
 
+  .table-title-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .table-title {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 14px;
@@ -468,6 +474,13 @@
     padding: 4px 10px;
     border-radius: 100px;
     font-weight: 500;
+  }
+
+  .table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
   }
 
   .orders-table {
@@ -571,6 +584,253 @@
   .badge-en-proceso { color: var(--blue); background: var(--blue-bg); }
 
   .cell-date { font-size: 11px; color: var(--text-faint); font-weight: 400; }
+
+  /* ════════ FILTER ICON & DROPDOWN ════════ */
+  .filter-toggle {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    color: var(--text-muted);
+  }
+
+  .filter-toggle:hover {
+    border-color: var(--amber-border);
+    color: var(--amber);
+    background: var(--amber-glow2);
+  }
+
+  .filter-toggle.active {
+    border-color: var(--amber-border-h);
+    color: var(--amber);
+    background: var(--amber-glow);
+  }
+
+  .filter-toggle svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .filter-toggle .filter-dot {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 8px;
+    height: 8px;
+    background: var(--amber);
+    border-radius: 50%;
+    border: 2px solid var(--bg-card);
+    display: none;
+  }
+
+  .filter-toggle.has-filter .filter-dot { display: block; }
+
+  .filter-active-pill {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: var(--amber-glow2);
+    border: 1px solid var(--amber-border);
+    color: var(--amber);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: default;
+  }
+
+  .filter-active-pill.show { display: inline-flex; }
+
+  .filter-active-pill .pill-x {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    font-size: 12px;
+    line-height: 1;
+    margin-left: 2px;
+  }
+
+  .filter-active-pill .pill-x:hover { opacity: 1; }
+
+  .filter-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 300px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+    z-index: 50;
+    display: none;
+    overflow: hidden;
+  }
+
+  .filter-dropdown.open {
+    display: block;
+    animation: dropIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .fd-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .fd-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .fd-close {
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    transition: color 0.2s;
+    padding: 0;
+  }
+
+  .fd-close:hover { color: var(--text); }
+
+  .fd-body { padding: 16px 18px; }
+
+  .fd-quick {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .fd-quick-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+    padding: 6px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .fd-quick-btn:hover {
+    border-color: var(--amber-border);
+    color: var(--amber);
+    background: var(--amber-glow2);
+  }
+
+  .fd-quick-btn.active {
+    border-color: var(--amber-border-h);
+    color: var(--amber);
+    background: var(--amber-glow);
+  }
+
+  .fd-label {
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .fd-input {
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--radius-xs);
+    outline: none;
+    width: 100%;
+    transition: border-color 0.25s;
+    cursor: pointer;
+  }
+
+  .fd-input:focus { border-color: var(--amber-border-h); }
+
+  .fd-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) saturate(3) hue-rotate(10deg);
+    cursor: pointer;
+  }
+
+  .fd-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .fd-row > div { flex: 1; }
+
+  .fd-sep {
+    font-size: 10px;
+    color: var(--text-faint);
+    padding-top: 18px;
+  }
+
+  .fd-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .fd-btn-apply {
+    flex: 1;
+    background: var(--amber);
+    border: none;
+    color: #000;
+    padding: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .fd-btn-apply:hover { background: var(--amber-light); }
+
+  .fd-btn-clear {
+    background: none;
+    border: 1px solid var(--border-light);
+    color: var(--text-muted);
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .fd-btn-clear:hover { border-color: var(--amber-border); color: var(--text-soft); }
 
   /* ════════ TOP CLIENTS SIDEBAR ════════ */
   .clients-card {
@@ -971,6 +1231,7 @@
     .kpi-value { font-size: 36px; }
     .header-inner { gap: 12px; }
     .btn-header span { display: none; }
+    .filter-dropdown { width: 280px; right: -10px; }
   }
 </style>
 </head>
@@ -1047,6 +1308,8 @@ let allOrders = [];
 let allClients = [];
 let allItems = [];
 let currentOrderId = null;
+let isFilterActive = false;
+let currentFilterLabel = '';
 
 function toggleConfig() {
   const bar = document.getElementById('configBar');
@@ -1108,6 +1371,7 @@ async function loadAll() {
     allOrders = orders;
     allClients = clients;
     allItems = items;
+    isFilterActive = false;
     renderDashboard();
   } catch (e) {
     document.getElementById('mainContent').innerHTML = `<div class="error-state">⚠ Error al conectar con Airtable — ${e.message}. Verifica tu token en Config.</div>`;
@@ -1130,12 +1394,20 @@ function getInitials(name) {
   return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
 
+function getOrderDateStr(order) {
+  return new Date(order.createdTime).toLocaleDateString('en-CA', { timeZone: 'America/Puerto_Rico' });
+}
+
+function getFilteredOrders(fromDate, toDate) {
+  return allOrders.filter(o => {
+    const d = getOrderDateStr(o);
+    return d >= fromDate && d <= toDate;
+  });
+}
+
 function renderDashboard() {
   const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Puerto_Rico' });
-  const ordersToday = allOrders.filter(o => {
-    const created = new Date(o.createdTime).toLocaleDateString('en-CA', { timeZone: 'America/Puerto_Rico' });
-    return created === today;
-  });
+  const ordersToday = allOrders.filter(o => getOrderDateStr(o) === today);
   const pendientes = allOrders.filter(o => o.fields.Estado === 'Pendiente');
   const completadas = allOrders.filter(o => o.fields.Estado === 'Completada');
   const total = allOrders.length;
@@ -1207,10 +1479,51 @@ function renderDashboard() {
     <div class="content-layout">
       <div class="table-card">
         <div class="table-header">
-          <div class="table-title">Órdenes Recientes</div>
-          <div class="table-count">${allOrders.length} registros</div>
+          <div class="table-title-area">
+            <div class="table-title" id="tableTitle">Órdenes Recientes</div>
+            <div class="table-count" id="tableCount">${allOrders.length} registros</div>
+            <div class="filter-active-pill" id="filterPill">
+              <span id="filterPillText"></span>
+              <span class="pill-x" onclick="clearDateFilter()">✕</span>
+            </div>
+          </div>
+          <div class="table-actions">
+            <button class="filter-toggle" id="filterToggle" onclick="toggleFilterDropdown(event)">
+              <svg viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="filter-dot"></div>
+            </button>
+            <div class="filter-dropdown" id="filterDropdown">
+              <div class="fd-header">
+                <div class="fd-title">Filtrar por Fecha</div>
+                <button class="fd-close" onclick="closeFilterDropdown()">×</button>
+              </div>
+              <div class="fd-body">
+                <div class="fd-quick">
+                  <button class="fd-quick-btn" onclick="quickDateFilter('today')">Hoy</button>
+                  <button class="fd-quick-btn" onclick="quickDateFilter('yesterday')">Ayer</button>
+                  <button class="fd-quick-btn" onclick="quickDateFilter('7d')">7 días</button>
+                  <button class="fd-quick-btn" onclick="quickDateFilter('30d')">30 días</button>
+                </div>
+                <div class="fd-row">
+                  <div>
+                    <div class="fd-label">Desde</div>
+                    <input type="date" class="fd-input" id="fdFrom">
+                  </div>
+                  <div class="fd-sep">—</div>
+                  <div>
+                    <div class="fd-label">Hasta</div>
+                    <input type="date" class="fd-input" id="fdTo">
+                  </div>
+                </div>
+                <div class="fd-actions">
+                  <button class="fd-btn-apply" onclick="applyDateFilter()">Aplicar Filtro</button>
+                  <button class="fd-btn-clear" onclick="clearDateFilter()">Limpiar</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        ${renderOrdersTable()}
+        <div id="ordersTableWrap">${renderOrdersTable(allOrders)}</div>
       </div>
 
       <div class="clients-card">
@@ -1237,11 +1550,14 @@ function renderDashboard() {
       </div>
     </div>
   `;
+
+  // Re-attach click outside listener
+  document.addEventListener('click', handleClickOutsideFilter);
 }
 
-function renderOrdersTable() {
-  const sorted = [...allOrders].sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime)).slice(0, 20);
-  if (sorted.length === 0) return '<div class="no-data">No hay órdenes aún</div>';
+function renderOrdersTable(orders) {
+  const sorted = [...orders].sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime)).slice(0, 20);
+  if (sorted.length === 0) return '<div class="no-data" style="text-align:center;padding:40px 24px">No se encontraron órdenes en este rango</div>';
 
   return `
     <table class="orders-table">
@@ -1290,6 +1606,148 @@ function renderOrdersTable() {
   `;
 }
 
+/* ═══════ FILTER LOGIC ═══════ */
+function toggleFilterDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('filterDropdown');
+  const btn = document.getElementById('filterToggle');
+  if (dd.classList.contains('open')) {
+    closeFilterDropdown();
+  } else {
+    dd.classList.add('open');
+    btn.classList.add('active');
+  }
+}
+
+function closeFilterDropdown() {
+  const dd = document.getElementById('filterDropdown');
+  if (dd) dd.classList.remove('open');
+  const btn = document.getElementById('filterToggle');
+  if (btn && !isFilterActive) btn.classList.remove('active');
+}
+
+function handleClickOutsideFilter(e) {
+  const dd = document.getElementById('filterDropdown');
+  const btn = document.getElementById('filterToggle');
+  if (dd && btn && !dd.contains(e.target) && !btn.contains(e.target)) {
+    closeFilterDropdown();
+  }
+}
+
+function applyDateFilter() {
+  const from = document.getElementById('fdFrom').value;
+  const to = document.getElementById('fdTo').value;
+  if (!from && !to) { showToast('Selecciona al menos una fecha'); return; }
+
+  const fromDate = from || '2000-01-01';
+  const toDate = to || '2099-12-31';
+  const filtered = getFilteredOrders(fromDate, toDate);
+
+  const fromLabel = from ? new Date(from + 'T12:00:00').toLocaleDateString('es-PR', { day: 'numeric', month: 'short' }) : '';
+  const toLabel = to ? new Date(to + 'T12:00:00').toLocaleDateString('es-PR', { day: 'numeric', month: 'short' }) : '';
+  let label = from && to ? `${fromLabel} — ${toLabel}` : from ? `Desde ${fromLabel}` : `Hasta ${toLabel}`;
+
+  setFilterActive(label, filtered);
+  closeFilterDropdown();
+  showToast(`${filtered.length} órdenes encontradas`);
+}
+
+function quickDateFilter(range) {
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Puerto_Rico' });
+  const todayDate = new Date(today + 'T12:00:00');
+  let from, to, label;
+
+  // Clear active states on quick buttons
+  document.querySelectorAll('.fd-quick-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  switch (range) {
+    case 'today':
+      from = to = today;
+      label = 'Hoy';
+      break;
+    case 'yesterday': {
+      const yd = new Date(todayDate);
+      yd.setDate(yd.getDate() - 1);
+      from = to = yd.toLocaleDateString('en-CA');
+      label = 'Ayer';
+      break;
+    }
+    case '7d': {
+      const d7 = new Date(todayDate);
+      d7.setDate(d7.getDate() - 6);
+      from = d7.toLocaleDateString('en-CA');
+      to = today;
+      label = '7 días';
+      break;
+    }
+    case '30d': {
+      const d30 = new Date(todayDate);
+      d30.setDate(d30.getDate() - 29);
+      from = d30.toLocaleDateString('en-CA');
+      to = today;
+      label = '30 días';
+      break;
+    }
+  }
+
+  document.getElementById('fdFrom').value = from;
+  document.getElementById('fdTo').value = to;
+
+  const filtered = getFilteredOrders(from, to);
+  setFilterActive(label, filtered);
+  closeFilterDropdown();
+  showToast(`${filtered.length} órdenes encontradas`);
+}
+
+function setFilterActive(label, filtered) {
+  isFilterActive = true;
+  currentFilterLabel = label;
+
+  const toggle = document.getElementById('filterToggle');
+  const pill = document.getElementById('filterPill');
+  const pillText = document.getElementById('filterPillText');
+  const wrap = document.getElementById('ordersTableWrap');
+  const title = document.getElementById('tableTitle');
+  const count = document.getElementById('tableCount');
+
+  toggle.classList.add('active', 'has-filter');
+  pill.classList.add('show');
+  pillText.textContent = `${label} · ${filtered.length}`;
+  title.textContent = 'Órdenes Filtradas';
+  count.textContent = `${filtered.length} registros`;
+  wrap.innerHTML = renderOrdersTable(filtered);
+}
+
+function clearDateFilter() {
+  isFilterActive = false;
+  currentFilterLabel = '';
+
+  const toggle = document.getElementById('filterToggle');
+  const pill = document.getElementById('filterPill');
+  const wrap = document.getElementById('ordersTableWrap');
+  const title = document.getElementById('tableTitle');
+  const count = document.getElementById('tableCount');
+
+  if (toggle) toggle.classList.remove('active', 'has-filter');
+  if (pill) pill.classList.remove('show');
+
+  const fdFrom = document.getElementById('fdFrom');
+  const fdTo = document.getElementById('fdTo');
+  if (fdFrom) fdFrom.value = '';
+  if (fdTo) fdTo.value = '';
+
+  document.querySelectorAll('.fd-quick-btn').forEach(b => b.classList.remove('active'));
+
+  if (title) title.textContent = 'Órdenes Recientes';
+  if (count) count.textContent = `${allOrders.length} registros`;
+  if (wrap) wrap.innerHTML = renderOrdersTable(allOrders);
+
+  closeFilterDropdown();
+  showToast('Filtro eliminado');
+}
+
+/* ═══════ MODAL ═══════ */
 function openModal(orderId) {
   currentOrderId = orderId;
   const order = allOrders.find(o => o.id === orderId);
